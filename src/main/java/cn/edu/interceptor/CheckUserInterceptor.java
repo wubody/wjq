@@ -22,14 +22,9 @@ public class CheckUserInterceptor implements HandlerInterceptor{
 
         HttpSession session=httpServletRequest.getSession();
         String path=httpServletRequest.getRequestURI();
-
-
         if(path.indexOf("user/index.html")!=-1||path.indexOf("user/username")!=-1||path.indexOf("user/goregister.html")!=-1||path.indexOf("user/login.html")!=-1||path.indexOf("user/register.html")!=-1){
-
             return true;
         }
-
-
         if(session.getAttribute("user")!=null){
             System.out.println("当前用户为合法用户");
             return true;

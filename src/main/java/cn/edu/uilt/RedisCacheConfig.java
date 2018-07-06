@@ -22,13 +22,7 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
         super();
     }
 
-    /**
-     * 带参数的构造方法 初始化所有的成员变量
-     *
-     * @param jedisConnectionFactory
-     * @param redisTemplate
-     * @param redisCacheManager
-     */
+
     public RedisCacheConfig(JedisConnectionFactory jedisConnectionFactory, RedisTemplate<String, String> redisTemplate,
                             RedisCacheManager redisCacheManager) {
         this.jedisConnectionFactory = jedisConnectionFactory;

@@ -101,20 +101,15 @@ public class AuctionuserController {
     }
     @RequestMapping("/register.html")
     public String register(Model model,@Validated Auctionuser user, BindingResult bindingResult){
-
-
         auctionuserService.addUser(user);
-
         return "login";
     }
 
 
     @RequestMapping(value = "/username",method= RequestMethod.POST,produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public  Map<String,Object> username(@RequestParam String username, HttpServletRequest request, HttpServletResponse response)throws Exception{
+    public  Map<String,Object> username(@RequestParam String username)throws Exception{
         Map<String,Object> result=new HashMap<String, Object>();
-
-        //ModelAndView mv=new ModelAndView("login");
         try{
             Auctionuser auctionuser=auctionuserService.selectByUserName(username);
             if(auctionuser==null){
@@ -123,8 +118,6 @@ public class AuctionuserController {
             }else{
                 System.out.println(username+"yes");
                 result.put("u","NO");
-
-
             }
 
         }catch (Exception e){
