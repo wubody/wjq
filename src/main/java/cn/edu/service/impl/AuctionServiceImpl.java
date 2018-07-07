@@ -6,6 +6,9 @@ import cn.edu.dao.AuctionrecordMapper;
 import cn.edu.pojo.*;
 import cn.edu.service.AuctionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -19,6 +22,7 @@ public class AuctionServiceImpl implements AuctionService{
     AuctionCustomMapper auctionCustomMapper;
     @Autowired
     AuctionrecordMapper auctionrecordMapper;
+    //查询商品
     @Override
     public List<Auction> findAuctions(Auction auction) {
 
@@ -44,20 +48,25 @@ public class AuctionServiceImpl implements AuctionService{
         auctionExample.setOrderByClause("auctionstarttime desc");
         return auctionMapper.selectByExample(auctionExample);
     }
+    //添加商品
+    @CachePut(value = {"getAuctionById"},key = "#auctionid  ")
     @Override
     public void  addAuction(Auction auction){
         auctionMapper.insert(auction);
     }
-
+    //通过商品id查询商品
+    @Cacheable(value = "getAuctionById",key="#auctionid")
     @Override
     public Auction getAuctionById(int auctionid) {
         return auctionMapper.selectByPrimaryKey(auctionid);
     }
-
+    //更新商品信息
+    @CachePut(value = {"getAuctionById"},key = "#auctionid")
     @Override
     public void updateAuction(Auction auction) {
         auctionMapper.updateByPrimaryKey(auction);
     }
+    //通过商品id查询商品信息和该商品的竞拍信息
 
     @Override
     public Auction findAuctionAndRecordListById(int auctionid) {
@@ -83,7 +92,8 @@ public class AuctionServiceImpl implements AuctionService{
         }
         auctionrecordMapper.insert(auctionrecord);
     }
-
+    //通过商品id删除商品
+    @CacheEvict(value = {"getAuctionById"},key = "#auctionid")
     @Override
     public void deleteAuction(int auctionid) {
         AuctionrecordExample example=new AuctionrecordExample();

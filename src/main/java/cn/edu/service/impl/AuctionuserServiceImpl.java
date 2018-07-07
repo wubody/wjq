@@ -3,6 +3,8 @@ package cn.edu.service.impl;
 import cn.edu.dao.AuctionuserMapper;
 import cn.edu.pojo.Auctionuser;
 import cn.edu.service.AuctionuserService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,14 +17,15 @@ import javax.annotation.Resource;
 public class AuctionuserServiceImpl implements AuctionuserService {
     @Resource
     AuctionuserMapper auctionuserMapper;
-
-    @Cacheable("selectByUserName")
+    //通过username查找用户
+    @Cacheable(value = "selectByUserName",key="#userName")
     @Override
     public Auctionuser selectByUserName(String userName){
 
         return auctionuserMapper.selectByUsername(userName);
     }
-
+    //添加user
+    @CachePut(value = "selectByUserName",key = "#userName")
     @Override
     public void addUser(Auctionuser auctionuser) {
         auctionuserMapper.insert(auctionuser);
