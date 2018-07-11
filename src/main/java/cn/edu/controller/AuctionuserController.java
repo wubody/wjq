@@ -27,13 +27,13 @@ import java.util.Map;
 public class AuctionuserController {
     @Resource
     AuctionuserService auctionuserService;
-
+    //跳转到登陆界面
     @RequestMapping(value = "/index.html")
     public String b(HttpServletResponse response,HttpSession session){
         session.invalidate();
         return "login";
     }
-
+    //用户登陆，登陆成功把名字存进cookie
     @RequestMapping(value = "/login.html")
     public ModelAndView a(String username,
                           String userpassword,
@@ -54,13 +54,9 @@ public class AuctionuserController {
 
                     if (rem_u!=""){
                         Cookie usernameCookie=new Cookie("username",auctionuser.getUsername());
-                        Cookie userpasswordCookie=new Cookie("userpassword",auctionuser.getUserpassword());
                         usernameCookie.setMaxAge(Integer.MAX_VALUE);
                         usernameCookie.setPath("/");
-                        userpasswordCookie.setMaxAge(Integer.MAX_VALUE);
-                        userpasswordCookie.setPath("/");
                         response.addCookie(usernameCookie);
-                        response.addCookie(userpasswordCookie);
                     }
 
                     mv.setViewName("redirect:/auction/queryAuctions.html");
@@ -79,33 +75,49 @@ public class AuctionuserController {
         }
         return mv;
     }
+    //跳转到注册页面
     @RequestMapping("/goregister.html")
     public String goregister(){
         return "register";
     }
-
+    //注销登陆，清除cookie
     @RequestMapping("/doLogout.html")
     public String doLgin(HttpSession session,HttpServletResponse response){
 
         Auctionuser auctionuser=(Auctionuser) session.getAttribute("user");
         Cookie usernameCookie=new Cookie("username",auctionuser.getUsername());
-        Cookie userpasswordCookie=new Cookie("userpassword",auctionuser.getUserpassword());
+
         usernameCookie.setMaxAge(0);
         usernameCookie.setPath("/");
-        userpasswordCookie.setMaxAge(0);
-        userpasswordCookie.setPath("/");
+
         response.addCookie(usernameCookie);
-        response.addCookie(userpasswordCookie);
+
         session.invalidate();
         return "login";
     }
+    //获取前端信息，注册用户
     @RequestMapping("/register.html")
     public String register(Model model,@Validated Auctionuser user, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            List<ObjectError> errors=bindingResult.getAllErrors();
+            if(auctionuserService.selectByUserName(user.getUsername())==null) {
+                for (ObjectError error : errors) {
+                    System.out.println(error.getArguments());
+
+                }
+            }else {
+                model.addAttribute("a","用户名已存在");
+            }
+
+            model.addAttribute("errors",errors);
+            return "register";
+        }
         auctionuserService.addUser(user);
+
         return "login";
     }
 
-
+    //注册用户时异步验证用户名
     @RequestMapping(value = "/username",method= RequestMethod.POST,produces = "application/json;charset=UTF-8")
     @ResponseBody
     public  Map<String,Object> username(@RequestParam String username)throws Exception{

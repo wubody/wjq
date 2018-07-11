@@ -33,7 +33,7 @@ public class auctionController {
 	@Autowired
 	private AuctionService auctionService;
 	public static final int PAGE_SIZE = 10;
-	
+	//每次10条显示商品信息
 	@RequestMapping("/queryAuctions.html")
 	public ModelAndView queryAuctios(
 	        @ModelAttribute("condition") Auction condition,
@@ -48,12 +48,12 @@ public class auctionController {
 		mv.setViewName("index");
 		return mv;
 	}
+	//跳转到添加商品的页面
 	@RequestMapping("/goadd.html")
 	public String goadd(){
-
 		return "addAuction";
 	}
-	//添加auction
+	//添加商品
 	@RequestMapping("/publishAuctions.html")
 	public String piblishAuctions(Auction auction, MultipartFile pic, HttpSession session){
 		try {
@@ -71,6 +71,7 @@ public class auctionController {
 		}
 		return "redirect:/auction/queryAuctions.html";
 	}
+	//根据id跳转到修改页面
 	@RequestMapping("/toupdate/{auctionid}.html")
 	public ModelAndView toupdate(@PathVariable int auctionid){
 		ModelAndView mv=new ModelAndView();
@@ -79,13 +80,12 @@ public class auctionController {
 		mv.setViewName("updateAuction");
 		return mv;
 	}
-
+	//修改商品信息
 	@RequestMapping("/updateAuctoinSubmit.html")
 	public String updateAuctoinSubmit(Auction auction, MultipartFile pic, HttpSession session){
 		try {
 			String path=session.getServletContext().getRealPath("upload");
 			if(pic.getSize()>0){
-
 				File oldFile=new File(path,auction.getAuctionpic());
 				if (oldFile.exists()){
 					oldFile.delete();
@@ -93,7 +93,6 @@ public class auctionController {
 				File targetFile =new File(path,pic.getOriginalFilename());
 				pic.transferTo(targetFile);
 			}
-
 			auction.setAuctionpic(pic.getOriginalFilename());
 			auction.setAuctionpictype(pic.getContentType());
 			auctionService.updateAuction(auction);
@@ -102,6 +101,7 @@ public class auctionController {
 		}
 		return "redirect:/auction/queryAuctions.html";
 	}
+	//跳转到竞拍页面
 	@RequestMapping("/toDetail/{auctionid}.html")
 	public ModelAndView toDetail(@PathVariable int auctionid){
 		ModelAndView mv=new ModelAndView();
@@ -110,6 +110,7 @@ public class auctionController {
 		mv.setViewName("auctionDetail");
 		return mv;
 	}
+	//错误页面
 	@RequestMapping("/saveAuctionRecord.html")
 	public String saveAuctionRecord(Auctionrecord record,HttpSession session,Model model){
 		try{
@@ -124,11 +125,13 @@ public class auctionController {
 		}
 		return "redirect:/auction/toDetail/"+record.getAuctionid()+".html";
 	}
+	//根据商品id删除商品
 	@RequestMapping("/deleteAuction/{auctionid}.html")
 	public String deleteAuction(@PathVariable int auctionid){
 		auctionService.deleteAuction(auctionid);
 		return "redirect:/auction/queryAuctions.html";
 	}
+	//跳转到竞拍结果页面
 	@RequestMapping("/toAuctionResult.html")
 	public ModelAndView toAuctionResult(){
 		ModelAndView mv=new ModelAndView();

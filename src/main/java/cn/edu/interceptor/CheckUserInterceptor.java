@@ -30,20 +30,14 @@ public class CheckUserInterceptor implements HandlerInterceptor{
             return true;
         }else {
             String username="";
-            String userpassword="";
             Cookie[] cookies=httpServletRequest.getCookies();
             if(cookies!=null){
                 for (Cookie cookie:cookies) {
                     if("username".equals(cookie.getName())){
                         username=cookie.getValue();
                     }
-                    if("userpassword".equals(cookie.getName())){
-                        userpassword=cookie.getValue();
-                    }
                 }
-                if(!"".equals(username)&&!"".equals(userpassword)){
-                    System.out.println(username);
-
+                if(!"".equals(username)){
                     Auctionuser auctionuser=auctionuserService.selectByUserName(username);
                     session.setAttribute("user",auctionuser);
                     return true;

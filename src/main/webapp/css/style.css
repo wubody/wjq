@@ -13,7 +13,7 @@ ul li,ul,p{ list-style:none;padding:0; margin:0}
 .wrap{ width:960px; margin:0 auto}
 select,input,label,button,button{ vertical-align:middle}
 .main{ padding:27px 0 0 70px; clear:both}
-.spbg{ background:url(../jsp/images/buttom.jpg) no-repeat}
+.spbg{ background:url(../images/buttom.jpg) no-repeat}
 .sidebar{ width:443px; float:left}
 .sidebarg{width:400px; float:right; padding:40px 0 0}
  .sidebarg label,.sidebarg input{float:left}

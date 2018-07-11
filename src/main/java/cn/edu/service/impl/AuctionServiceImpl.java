@@ -66,13 +66,13 @@ public class AuctionServiceImpl implements AuctionService{
     public void updateAuction(Auction auction) {
         auctionMapper.updateByPrimaryKey(auction);
     }
-    //通过商品id查询商品信息和该商品的竞拍信息
 
+    //通过商品id查询商品信息和该商品的竞拍信息
     @Override
     public Auction findAuctionAndRecordListById(int auctionid) {
         return auctionCustomMapper.findAuctionAndRecordListById(auctionid);
     }
-
+    //添加商品竞拍价格
     @Override
     public void addAuctionRecord(Auctionrecord auctionrecord) throws Exception{
         Auction auction=auctionCustomMapper.findAuctionAndRecordListById(auctionrecord.getAuctionid());
@@ -102,15 +102,18 @@ public class AuctionServiceImpl implements AuctionService{
         auctionrecordMapper.deleteByExample(example);
         auctionMapper.deleteByPrimaryKey(auctionid);
     }
-
+    //已经结束拍卖的商品列表
     @Override
     public List<AuctionCustom> finAuctionEndtimeList() {
         return auctionCustomMapper.finAuctionEndtimeList();
     }
-
+    //还未结束拍卖的商品列表
     @Override
     public List<Auction> findAuctionNoEndtimeList() {
         return auctionCustomMapper.findAuctionNoEndtimeList();
     }
+
+
+
 
 }

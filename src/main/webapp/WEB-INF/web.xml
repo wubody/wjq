@@ -35,7 +35,7 @@
   <!--为DispatcherServlet建立映射 -->
   <servlet-mapping>
     <servlet-name>springMVC</servlet-name>
-    <!-- 此处可以可以配置成*.html -->
+    <!-- 此处可以可以配置成/ -->
     <url-pattern>/</url-pattern>
   </servlet-mapping>
 
