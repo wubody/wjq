@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 public class AuctionuserServiceImpl implements AuctionuserService {
     @Resource
     AuctionuserMapper auctionuserMapper;
-    //通过username查找用户
+    //通过username查找用户，并存到redis里
     @Cacheable(value = "selectByUserName",key="#userName")
     @Override
     public Auctionuser selectByUserName(String userName){
