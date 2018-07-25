@@ -128,6 +128,8 @@ public class auctionController {
 	//根据商品id删除商品
 	@RequestMapping("/deleteAuction/{auctionid}.html")
 	public String deleteAuction(@PathVariable int auctionid){
+
+		Auction auction=auctionService.getAuctionById(12);
 		auctionService.deleteAuction(auctionid);
 		return "redirect:/auction/queryAuctions.html";
 	}

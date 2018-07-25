@@ -33,17 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         function  tt() {
             document.location.href="${pageContext.request.contextPath}/user/goregister.html"
         }
-        <c:choose>
-            <c:when test="${msg=='registerSuccess'}">
-               alert('注册成功，系统将自动跳转登录页')
-            </c:when>
-            <c:when test="${msg=='loginError'}">
-                alert('用户名密码错误，请重新登录')
-            </c:when>
-            <c:when test="${msg=='validateCodeError'}">
-               alert('验证码错误，请重新输入')
-             </c:when>
-        </c:choose>
+
 	</script>
 
   </head>
@@ -90,13 +80,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </div>
     </form>
    </div>
-  <div class="cl"></div>
-     <img src="${pageContext.request.contextPath}/images/ad20.jpg" alt="">
-     <img src="${pageContext.request.contextPath}/images/ad20.jpg" alt="">
-     <img src="${pageContext.request.contextPath}/images/ad20.jpg" alt="">
-     <img src="${pageContext.request.contextPath}/images/ad20.jpg" alt="">
-     <img src="${pageContext.request.contextPath}/images/ad20.jpg" alt="">
- </div>
+
 <!-- main end-->
  
 <!-- footer begin-->

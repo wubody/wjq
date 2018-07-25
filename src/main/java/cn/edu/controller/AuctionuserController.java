@@ -45,8 +45,8 @@ public class AuctionuserController {
         ModelAndView mv=new ModelAndView("login");
         String msg;
         HttpSession session=request.getSession();
-        String box1=(String) (session.getAttribute("numrand"));
-        if(box1.compareTo(inputCode)==0){
+        String box1=(String)session.getAttribute("numrand");
+        if(box1.equals(inputCode)){
             Auctionuser auctionuser=auctionuserService.selectByUserName(username);
             if(auctionuser!=null){
                 if(auctionuser.getUserpassword().compareTo(userpassword)==0){

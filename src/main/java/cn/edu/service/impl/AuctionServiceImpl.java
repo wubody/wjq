@@ -1,5 +1,6 @@
 package cn.edu.service.impl;
 
+import cn.edu.anno.AdminOnly;
 import cn.edu.dao.AuctionCustomMapper;
 import cn.edu.dao.AuctionMapper;
 import cn.edu.dao.AuctionrecordMapper;
@@ -49,19 +50,19 @@ public class AuctionServiceImpl implements AuctionService{
         return auctionMapper.selectByExample(auctionExample);
     }
     //添加商品
-    @CachePut(value = {"getAuctionById"},key = "#auctionid  ")
+    @CachePut(value = {"getAuctionById"},key = "#auction.getAuctionid().toString()")
     @Override
     public void  addAuction(Auction auction){
         auctionMapper.insert(auction);
     }
     //通过商品id查询商品
-    @Cacheable(value = "getAuctionById",key="#auctionid")
+    @Cacheable(value = "getAuctionById",key="#auctionid.toString()")
     @Override
     public Auction getAuctionById(int auctionid) {
         return auctionMapper.selectByPrimaryKey(auctionid);
     }
     //更新商品信息
-    @CachePut(value = {"getAuctionById"},key = "#auctionid")
+    @CachePut(value = {"getAuctionById"},key = "#auctionid.toString()")
     @Override
     public void updateAuction(Auction auction) {
         auctionMapper.updateByPrimaryKey(auction);
@@ -93,7 +94,8 @@ public class AuctionServiceImpl implements AuctionService{
         auctionrecordMapper.insert(auctionrecord);
     }
     //通过商品id删除商品
-    @CacheEvict(value = {"getAuctionById"},key = "#auctionid")
+    @AdminOnly
+    @CacheEvict(value = "getAuctionById",key = "#auctionid.toString()")
     @Override
     public void deleteAuction(int auctionid) {
         AuctionrecordExample example=new AuctionrecordExample();
