@@ -98,6 +98,7 @@ public class AuctionuserController {
     //获取前端信息，注册用户
     @RequestMapping("/register.html")
     public String register(Model model,@Validated Auctionuser user, BindingResult bindingResult){
+
         if(bindingResult.hasErrors()){
             List<ObjectError> errors=bindingResult.getAllErrors();
             if(auctionuserService.selectByUserName(user.getUsername())==null) {

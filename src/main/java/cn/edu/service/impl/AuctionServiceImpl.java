@@ -4,6 +4,7 @@ import cn.edu.anno.AdminOnly;
 import cn.edu.dao.AuctionCustomMapper;
 import cn.edu.dao.AuctionMapper;
 import cn.edu.dao.AuctionrecordMapper;
+import cn.edu.log.AuctionLogDao;
 import cn.edu.pojo.*;
 import cn.edu.service.AuctionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -23,6 +25,9 @@ public class AuctionServiceImpl implements AuctionService{
     AuctionCustomMapper auctionCustomMapper;
     @Autowired
     AuctionrecordMapper auctionrecordMapper;
+    @Autowired
+    AuctionLogDao auctionLogDao;
+    AuctionLog auctionLog=new AuctionLog();
     //查询商品
     @Override
     public List<Auction> findAuctions(Auction auction) {
@@ -50,10 +55,16 @@ public class AuctionServiceImpl implements AuctionService{
         return auctionMapper.selectByExample(auctionExample);
     }
     //添加商品
-    @CachePut(value = {"getAuctionById"},key = "#auction.getAuctionid().toString()")
+    @Transactional
     @Override
-    public void  addAuction(Auction auction){
+    public void  addAuction(Auction auction,String user,int amdinType){
+        auctionLog.setUser(user);
+        auctionLog.setActionType("添加商品");
+        auctionLog.setAuction(auction);
+        auctionLog.setAdminType(amdinType);
+        auctionLogDao.insert(auctionLog);
         auctionMapper.insert(auction);
+        this.getnewAuction();
     }
     //通过商品id查询商品
     @Cacheable(value = "getAuctionById",key="#auctionid.toString()")
@@ -114,8 +125,12 @@ public class AuctionServiceImpl implements AuctionService{
     public List<Auction> findAuctionNoEndtimeList() {
         return auctionCustomMapper.findAuctionNoEndtimeList();
     }
-
-    //更改
+    //获取最新插入的商品信息
+    @CachePut(value = {"getAuctionById"},key = "#auction.getAuctionid().toString()")
+    public void getnewAuction(){
+        Auction auction=auctionMapper.selectNewAuction();
+    }
+    //更改商品信息后，redis重新获取
 
 
 

@@ -58,14 +58,14 @@ public class auctionController {
 	public String piblishAuctions(Auction auction, MultipartFile pic, HttpSession session){
 		try {
 		    String path=session.getServletContext().getRealPath("upload");
+		    Auctionuser auctionuser=(Auctionuser) session.getAttribute("user");
 		    if(pic.getSize()>0){
                 File targetFile =new File(path,pic.getOriginalFilename());
 				pic.transferTo(targetFile);
             }
-
 		    auction.setAuctionpic(pic.getOriginalFilename());
 		    auction.setAuctionpictype(pic.getContentType());
-		    auctionService.addAuction(auction);
+		    auctionService.addAuction(auction,auctionuser.getUsername(),auctionuser.getUserisadmin());
 		}catch (IOException e){
 			e.printStackTrace();
 		}

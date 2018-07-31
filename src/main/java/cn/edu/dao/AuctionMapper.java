@@ -30,4 +30,6 @@ public interface AuctionMapper {
     int updateByPrimaryKeySelective(Auction record);
 
     int updateByPrimaryKey(Auction record);
+
+    Auction selectNewAuction();
 }

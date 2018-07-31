@@ -1,8 +1,11 @@
 package cn.edu.service.impl;
 
 import cn.edu.dao.AuctionuserMapper;
+import cn.edu.log.AuctionUserLogDao;
+import cn.edu.pojo.AuctionUserLog;
 import cn.edu.pojo.Auctionuser;
 import cn.edu.service.AuctionuserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,6 +20,11 @@ import javax.annotation.Resource;
 public class AuctionuserServiceImpl implements AuctionuserService {
     @Resource
     AuctionuserMapper auctionuserMapper;
+    @Autowired
+    AuctionUserLogDao auctionUserLogDao;
+
+    AuctionUserLog auctionUserLog=new AuctionUserLog();
+
     //通过username查找用户，并存到redis里
     @Cacheable(value = "selectByUserName",key="#userName")
     @Override
@@ -25,9 +33,17 @@ public class AuctionuserServiceImpl implements AuctionuserService {
         return auctionuserMapper.selectByUsername(userName);
     }
     //添加user
-    @CachePut(value = "selectByUserName",key = "#userName")
+    @Transactional
+    @CachePut(value = "selectByUserName",key = "#auctionuser.getUsername().toString()")
     @Override
     public void addUser(Auctionuser auctionuser) {
+        auctionUserLog.setActionType("新增用户");
+        auctionUserLog.setAuctionuser(auctionuser);
+        auctionUserLogDao.insert(auctionUserLog);
         auctionuserMapper.insert(auctionuser);
     }
+
+
+
+
 }

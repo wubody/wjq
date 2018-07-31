@@ -273,5 +273,7 @@
       auctionDesc = #{auctiondesc,jdbcType=VARCHAR}
     where auctionId = #{auctionid,jdbcType=INTEGER}
   </update>
-
+  <select id="selectNewAuction" resultMap="BaseResultMap">
+    SELECT * FROM auction ORDER BY auctionId DESC LIMIT 1;
+  </select>
 </mapper>
